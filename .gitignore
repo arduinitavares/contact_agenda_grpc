@@ -1,0 +1,38 @@
+# Python
+# ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Virtual Environment
+# ----------------------------------------------------------------
+.venv/
+venv/
+ENV/
+
+
+# Build artifacts
+# ----------------------------------------------------------------
+dist/
+build/
+*.egg-info/
+
+
+# IDE / Editor-specific files
+# ----------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+
+# macOS-specific files
+# ----------------------------------------------------------------
+.DS_Store
+
+
+# Poetry
+# ----------------------------------------------------------------
+# Não ignore o poetry.lock, pois ele garante builds consistentes.
+# poetry.lock
