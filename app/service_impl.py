@@ -9,11 +9,12 @@ os dados dos contactos, que são armazenados em memória para simplificar.
 import uuid
 from typing import Dict
 
+import grpc
+
 # Nota: estes ficheiros serão gerados a partir do .proto numa fase posterior.
 # O seu editor de código pode assinalá-los como um erro por agora.
 import contacts_pb2
 import contacts_pb2_grpc
-import grpc
 
 
 class ContactServiceImpl(contacts_pb2_grpc.ContactServiceServicer):
@@ -25,7 +26,7 @@ class ContactServiceImpl(contacts_pb2_grpc.ContactServiceServicer):
         """Inicializa o serviço com um 'banco de dados' em memória."""
         self._contacts: Dict[str, contacts_pb2.Contact] = {}
 
-    def add_contact(self, request, context):
+    def AddContact(self, request, context):
         """Cria e armazena um novo contacto a partir de uma requisição."""
         print(f"Requisição para adicionar o contacto: {request.name}")
         contact_id = str(uuid.uuid4())
@@ -39,7 +40,7 @@ class ContactServiceImpl(contacts_pb2_grpc.ContactServiceServicer):
         print(f"Contacto '{contact.name}' adicionado com o ID: {contact_id}")
         return contact
 
-    def get_contact(self, request, context):
+    def GetContact(self, request, context):
         """Recupera um contacto específico com base no seu ID."""
         print(f"Requisição para consultar o ID: {request.id}")
         contact = self._contacts.get(request.id)
@@ -53,7 +54,7 @@ class ContactServiceImpl(contacts_pb2_grpc.ContactServiceServicer):
             f"Contacto com o ID '{request.id}' não encontrado.")
         return contacts_pb2.Contact()
 
-    def list_contacts(self, request, context):
+    def ListContacts(self, request, context):
         """Devolve a lista de todos os contactos registados."""
         print("Requisição para listar todos os contactos.")
         return contacts_pb2.ListContactsResponse(
