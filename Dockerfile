@@ -17,13 +17,13 @@ RUN pip install poetry
 # Copia os ficheiros de definição do projeto e de lock
 COPY pyproject.toml poetry.lock ./
 
-# Instala todas as dependências, incluindo as de desenvolvimento (--no-root para não instalar o projeto em si)
+# Instala todas as dependências, incluindo as de desenvolvimento
 RUN poetry install --no-root
 
 # Copia a pasta com a definição do protobuf
 COPY proto ./proto
 
-# Gera o código gRPC. Ativamos o ambiente virtual do Poetry para usar as ferramentas instaladas.
+# Gera o código gRPC.
 RUN . .venv/bin/activate && \
     python -m grpc_tools.protoc \
     -I./proto \
@@ -38,10 +38,6 @@ FROM python:3.13.2-slim
 
 WORKDIR /app
 
-# Define as mesmas variáveis de ambiente
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1
-
 # Copia o ambiente virtual com as dependências de produção do estágio anterior
 COPY --from=builder /app/.venv ./.venv
 
@@ -51,9 +47,12 @@ COPY --from=builder /app/contacts_pb2_grpc.py .
 
 # Copia o código da aplicação
 COPY app ./app
+COPY client ./client
 
 # Expõe a porta que o servidor gRPC irá usar
 EXPOSE 50051
 
-# Define o comando para executar o servidor quando o container iniciar
-CMD [".venv/bin/python", "app/server.py"]
+# --- CORREÇÃO AQUI ---
+# Define o comando para executar o servidor como um módulo,
+# o que garante que os caminhos de importação funcionem corretamente.
+CMD [".venv/bin/python", "-m", "app.server"]
