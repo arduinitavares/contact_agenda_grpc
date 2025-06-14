@@ -1,0 +1,79 @@
+// proto/contacts.proto
+
+syntax = "proto3";
+
+package contacts;
+
+// Enumeração para a categoria do contato.
+// Usar enums garante que apenas valores pré-definidos sejam aceitos.
+enum Category {
+  CATEGORY_UNSPECIFIED = 0; // Um valor padrão é obrigatório.
+  FAMILY = 1;
+  PERSONAL = 2;
+  BUSINESS = 3;
+}
+
+// Enumeração para o tipo de telefone.
+enum PhoneType {
+  PHONE_TYPE_UNSPECIFIED = 0; // Valor padrão.
+  MOBILE = 1;
+  HOME = 2;
+  WORK = 3;
+}
+
+// Mensagem que representa um número de telefone com seu tipo.
+message PhoneNumber {
+  string number = 1;
+  PhoneType type = 2;
+}
+
+// Mensagem que representa a entidade Contato.
+// Esta é a estrutura de dados principal da nossa API.
+message Contact {
+  string id = 1; // ID único, será gerado pelo servidor.
+  string name = 2;
+  repeated PhoneNumber phones = 3; // 'repeated' significa que é uma lista.
+  Category category = 4;
+}
+
+// --- Definições das Requisições e Respostas ---
+
+// Requisição para adicionar um novo contato.
+// Não inclui o 'id', pois será gerado pelo servidor.
+message AddContactRequest {
+  string name = 1;
+  repeated PhoneNumber phones = 2;
+  Category category = 3;
+}
+
+// Requisição para consultar um contato pelo seu ID.
+message GetContactRequest {
+  string id = 1;
+}
+
+// Requisição para listar todos os contatos.
+// Vazia, pois não precisa de parâmetros de entrada.
+message ListContactsRequest {}
+
+// Resposta que contém a lista de todos os contatos.
+message ListContactsResponse {
+  repeated Contact contacts = 1;
+}
+
+
+// --- Definição do Serviço ---
+
+// O serviço define os "endpoints" ou métodos da nossa API.
+service ContactService {
+  // Operação para adicionar um novo contato.
+  // Recebe um AddContactRequest e retorna o Contact criado (com id).
+  rpc AddContact(AddContactRequest) returns (Contact) {}
+
+  // Operação para consultar um contato pelo seu ID.
+  // Recebe um GetContactRequest e retorna o Contact encontrado.
+  rpc GetContact(GetContactRequest) returns (Contact) {}
+
+  // Operação para listar todos os contatos cadastrados.
+  // Recebe uma requisição vazia e retorna uma lista de contatos.
+  rpc ListContacts(ListContactsRequest) returns (ListContactsResponse) {}
+}
