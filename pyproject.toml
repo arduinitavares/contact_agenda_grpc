@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "contact-agenda-grpc"
+version = "0.1.0"
+description = ""
+authors = ["Alexandre Tavares <arduinitavares@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
