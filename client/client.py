@@ -6,16 +6,13 @@ Este cliente demonstra como interagir com a API, executando as operações
 de Adicionar, Consultar e Listar contactos.
 """
 
-from contacts_pb2 import Category, PhoneType
-import contacts_pb2_grpc
-import contacts_pb2
 import logging
-import sys
 
 import grpc
 
-# Adiciona o diretório raiz ao path para encontrar os módulos gerados
-sys.path.append(".")
+import contacts_pb2
+import contacts_pb2_grpc
+from contacts_pb2 import Category, PhoneType
 
 # Nota: estes ficheiros serão gerados a partir do .proto numa fase posterior.
 
@@ -25,7 +22,7 @@ def run_client():
     logging.basicConfig(level=logging.INFO)
     # Conecta-se ao servidor gRPC. 'localhost:50051' é o endereço onde
     # o nosso servidor estará a escutar.
-    with grpc.insecure_channel("localhost:50051") as channel:
+    with grpc.insecure_channel("192.168.64.3:50051") as channel:
         stub = contacts_pb2_grpc.ContactServiceStub(channel)
         logging.info("--- 1. A Adicionar Contactos ---")
         try:
@@ -34,10 +31,10 @@ def run_client():
                 name="Maria Silva",
                 phones=[
                     contacts_pb2.PhoneNumber(
-                        number="911222333", type=PhoneType.MOBILE
+                        number="911222333", type=contacts_pb2.PhoneType.MOBILE
                     )
                 ],
-                category=Category.PERSONAL,
+                category=contacts_pb2.Category.PERSONAL,
             )
             maria_contact = stub.AddContact(add_request_maria)
             logging.info(
@@ -48,9 +45,9 @@ def run_client():
                 name="João Souza",
                 phones=[
                     contacts_pb2.PhoneNumber(
-                        number="225444666", type=PhoneType.WORK)
+                        number="225444666", type=contacts_pb2.PhoneType.WORK)
                 ],
-                category=Category.BUSINESS,
+                category=contacts_pb2.Category.BUSINESS,
             )
             joao_contact = stub.AddContact(add_request_joao)
             logging.info(
