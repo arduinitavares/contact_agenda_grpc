@@ -11,10 +11,11 @@ import sys
 import time
 from concurrent import futures
 
-import contacts_pb2_grpc
 import grpc
+
+import contacts_pb2_grpc
 # Importa a implementação do serviço.
-from service_impl import ContactServiceImpl
+from app.service_impl import ContactServiceImpl
 
 # Adiciona o diretório raiz ao path para encontrar os módulos gerados.
 # É uma forma de garantir que os imports funcionem, independentemente
